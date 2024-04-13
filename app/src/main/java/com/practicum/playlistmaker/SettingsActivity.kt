@@ -7,5 +7,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        var myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.idSettingsToolbar)
+        setSupportActionBar(myToolbar)
+        myToolbar.setNavigationOnClickListener { finish() }
     }
 }
