@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="my_style_main">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginHorizontal">@dimen/margin_horizontal</item>
+        <!--        <item name="android:layout_marginTop">@dimen/margin_vertical</item>-->
+        <item name="android:layout_marginBottom">@dimen/margin_vertical</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+</resources>
