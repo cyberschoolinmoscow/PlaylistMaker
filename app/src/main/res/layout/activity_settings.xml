@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/base_style_layout">
+
+    <include layout="@layout/settings_toolbar" />
+
+    <LinearLayout style="@style/my_style_settings">
+
+
+        <LinearLayout style="@style/style_settings_layout">
+
+            <TextView
+                style="@style/settings_text"
+                android:text="@string/dark_theme" />
+
+            <ImageView
+                style="@style/settings_image"
+                android:src="@drawable/offswitch" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/style_settings_layout">
+
+            <TextView
+                style="@style/settings_text"
+                android:text="@string/share_app" />
+
+            <ImageView
+                style="@style/settings_image"
+                android:src="@drawable/share" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/style_settings_layout">
+
+            <TextView
+                style="@style/settings_text"
+                android:text="@string/contact_support" />
+
+            <ImageView
+                style="@style/settings_image"
+                android:src="@drawable/support" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/style_settings_layout">
+
+            <TextView
+                style="@style/settings_text"
+
+                android:text="@string/terms_of_service" />
+
+            <ImageView
+                style="@style/settings_image"
+                android:src="@drawable/arrow_right" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

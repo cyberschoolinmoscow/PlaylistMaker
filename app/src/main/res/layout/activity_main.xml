@@ -2,39 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/base_style_layout"
     android:layout_weight="3"
     android:background="@color/blue"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <include layout="@layout/my_toolbar" />
+    <include layout="@layout/main_toolbar" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/idSearch"
-        style="@style/my_style_main"
+        style="@style/main_style_button"
         android:text="@string/search"
-        app:cornerRadius="@dimen/corner_radius"
-        app:icon="@drawable/ic_search"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black" />
+        app:icon="@drawable/ic_search" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/idMediateka"
-        style="@style/my_style_main"
+        style="@style/main_style_button"
         android:text="@string/mediateka"
-        app:cornerRadius="@dimen/corner_radius"
-        app:icon="@drawable/mediateka"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black" />
+        app:icon="@drawable/mediateka" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/idSettings"
-        style="@style/my_style_main"
+        style="@style/main_style_button"
         android:text="@string/settings"
-        app:cornerRadius="@dimen/corner_radius"
-        app:icon="@drawable/settings"
-        app:iconGravity="textStart"
-        app:iconTint="@color/black" />
+        app:icon="@drawable/settings" />
 </LinearLayout>

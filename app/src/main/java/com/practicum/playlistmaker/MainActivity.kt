@@ -9,7 +9,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        myToolbar = findViewById(R.id.myToolbar)
+        myToolbar = findViewById(R.id.idMainToolbar)
         setSupportActionBar(myToolbar)
     }
 }
