@@ -2,8 +2,31 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- blue-black-->
+        <item name="colorPrimary">@color/blue</item>
+        <!-- white-white-->
+        <item name="colorPrimaryVariant">@color/white</item>
+        <!-- black-black-->
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- white-black. -->
+        <item name="colorSecondary">@color/white</item>
+        <!-- black-white-->
+        <item name="colorSecondaryVariant">@color/black</item>
+        <!-- grey-white-->
+        <item name="colorOnSecondary">@color/grey</item>
+        <!-- grey-black -->
+        <item name="colorOnBackground">@color/grey</item>
+        <!-- grey-blue-->
+        <item name="colorAccent">@color/grey</item>
+        <item name="colorBackgroundFloating">@color/darkGrey</item>
+        <!--knob-->
+        <item name="colorButtonNormal">@color/greyTrack</item>
+        <!--track-->
+        <item name="colorContainer">@color/darkGrey</item>
     </style>
 
-    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
+
+    </style>
+
 </resources>

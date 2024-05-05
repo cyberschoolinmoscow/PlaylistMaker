@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SettingsActivity"
     style="@style/base_style_layout">
 
     <include layout="@layout/settings_toolbar" />
@@ -14,9 +17,12 @@
                 style="@style/settings_text"
                 android:text="@string/dark_theme" />
 
-            <ImageView
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchBtn"
                 style="@style/settings_image"
-                android:src="@drawable/offswitch" />
+                app:trackTint="?attr/colorButtonNormal"
+                app:thumbTint="?attr/colorContainer" />
+
         </LinearLayout>
 
         <LinearLayout style="@style/style_settings_layout">
@@ -26,6 +32,7 @@
                 android:text="@string/share_app" />
 
             <ImageView
+                android:id="@+id/iv_share"
                 style="@style/settings_image"
                 android:src="@drawable/share" />
         </LinearLayout>
@@ -37,6 +44,7 @@
                 android:text="@string/contact_support" />
 
             <ImageView
+                android:id="@+id/iv_help"
                 style="@style/settings_image"
                 android:src="@drawable/support" />
         </LinearLayout>
@@ -49,6 +57,7 @@
                 android:text="@string/terms_of_service" />
 
             <ImageView
+                android:id="@+id/iv_agreement"
                 style="@style/settings_image"
                 android:src="@drawable/arrow_right" />
         </LinearLayout>

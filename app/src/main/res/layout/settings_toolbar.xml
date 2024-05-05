@@ -4,8 +4,8 @@
     android:id="@+id/idSettingsToolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="?attr/colorSecondary"
     app:navigationIcon="@drawable/back"
     app:title="@string/settings"
     android:textSize="@dimen/text_main_size"
-    app:titleTextColor="@color/black" />
+    app:titleTextColor="?attr/colorSecondaryVariant" />

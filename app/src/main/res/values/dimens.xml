@@ -2,11 +2,14 @@
 <resources>
     <dimen name="text_main_size">22sp</dimen>
     <dimen name="text_base_size">16sp</dimen>
-    <dimen name="margin_horizontal">16dp</dimen>
-    <dimen name="icon_margin_horizontal">12dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_14">14dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
     <dimen name="paddingHorizontal">16dp</dimen>
     <dimen name="margin_vertical">16dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
     <dimen name="layout_marginTop">20dp</dimen>
     <dimen name="layout_height_settings_button">61dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="paddingVertical_9">9dp</dimen>
 </resources>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="main_style_button">
-        <item name="android:backgroundTint">@color/white</item>
-        <item name="android:textColor">@color/black</item>
+    <style name="main_style_button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/text_main_size</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:layout_marginHorizontal">@dimen/margin_horizontal</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:layout_marginHorizontal">@dimen/margin_16</item>
         <item name="android:layout_marginBottom">@dimen/margin_vertical</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
@@ -16,7 +17,7 @@
         <item name="iconTint">@color/black</item>
     </style>
 
-    <style name="base_style_layout">
+    <style name="base_style_layout" parent="Theme.MaterialComponents.DayNight">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_marginHorizontal">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -25,6 +26,15 @@
         <item name="android:insetTop">0dp</item>
     </style>
 
+    <style name="base_style_layout_horizontal" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_8</item>
+        <item name="android:layout_marginStart">@dimen/margin_16</item>
+        <item name="android:background">@drawable/shape</item>
+        <item name="android:layout_marginEnd">@dimen/margin_16</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
     <style name="my_style_settings" parent="base_style_layout">
         <item name="android:layout_marginTop">@dimen/layout_marginTop</item>
         <item name="android:layout_height">wrap_content</item>
@@ -38,22 +48,59 @@
 
     </style>
 
-    <style name="settings_text">
+    <style name="settings_text" parent="Theme.MaterialComponents.DayNight">
         <item name="android:layout_weight">3</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:paddingHorizontal">@dimen/paddingHorizontal</item>
-        <item name="marginHorizontal">@dimen/margin_horizontal</item>
+        <item name="marginHorizontal">@dimen/margin_16</item>
         <item name="backgroundTint">@color/white</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
         <item name="android:textSize">@dimen/text_base_size</item>
     </style>
 
-    <style name="settings_image">
+    <style name="settings_image" parent="Theme.MaterialComponents.DayNight">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginHorizontal">@dimen/icon_margin_horizontal</item>
+        <item name="android:layout_marginHorizontal">@dimen/dp_12</item>
     </style>
+
+    <style name="toolbar_style" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_main_size</item>
+    </style>
+
+    <style name="search_edit_text" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:drawableLeft">@drawable/ic_search</item>
+        <item name="android:drawableTint">?attr/colorBackgroundFloating</item>
+        <item name="android:drawablePadding">@dimen/margin_8</item>
+        <item name="android:hint">@string/search</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColorHint">?attr/colorBackgroundFloating</item>
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:paddingHorizontal">@dimen/dp_12</item>
+        <item name="android:paddingVertical">@dimen/paddingVertical_9</item>
+        <item name="android:textSize">@dimen/text_base_size</item>
+    </style>
+
+    <style name="search_image_view" parent="Theme.MaterialComponents.DayNight">
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <!--        <item name="android:layout_marginStart">@dimen/margin_14</item>-->
+        <!--        <item name="android:layout_marginBottom">0dp</item>-->
+        <item name="tint">?attr/colorBackgroundFloating</item>
+    </style>
+
+
 </resources>
