@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorSecondary"
-    style="@style/toolbar_style"
+    style="@style/toolbar_text_style"
     app:navigationIcon="@drawable/back"
     app:title="@string/search"
     app:titleTextColor="?attr/colorSecondaryVariant" />

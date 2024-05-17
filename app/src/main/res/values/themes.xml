@@ -18,11 +18,14 @@
         <item name="colorOnBackground">@color/grey</item>
         <!-- grey-blue-->
         <item name="colorAccent">@color/grey</item>
+
         <item name="colorBackgroundFloating">@color/darkGrey</item>
         <!--knob-->
         <item name="colorButtonNormal">@color/greyTrack</item>
         <!--track-->
         <item name="colorContainer">@color/darkGrey</item>
+
+        <item name="colorControlActivated">@color/darkGrey</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">

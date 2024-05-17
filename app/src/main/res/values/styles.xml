@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="main_style_layout">
+        <item name="android:background">?attr/colorPrimary</item>>
+    </style>
+
+    <style name="text_main" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+        <item name="android:textSize">@dimen/text_base_size</item>
+    </style>
+
+    <style name="cardview_text_small" parent="text_main">
+        <item name="android:textColor">?attr/colorControlActivated</item>
+        <item name="android:textSize">@dimen/text_small_size</item>
+    </style>
+
+    <style name="settings_text" parent="text_main">
+        <item name="android:layout_weight">3</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">@dimen/paddingHorizontal</item>
+        <item name="marginHorizontal">@dimen/margin_16</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+    <style name="toolbar_text_style" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_main_size</item>
+    </style>
+
+    <style name="search_edit_text" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:drawableLeft">@drawable/ic_search</item>
+        <item name="android:drawableTint">?attr/colorBackgroundFloating</item>
+        <item name="android:drawablePadding">@dimen/margin_8</item>
+        <item name="android:hint">@string/search</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColorHint">?attr/colorBackgroundFloating</item>
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_base_size</item>
+    </style>
+
+    <style name="settings_image" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginHorizontal">@dimen/dp_12</item>
+    </style>
+
+    <style name="search_image_view" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="tint">?attr/colorBackgroundFloating</item>
+    </style>
+
+    <style name="cardview_image_style">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:src">@drawable/placeholder</item>
+        <item name="cornerRadius">@dimen/corner_radius_pic</item>
+    </style>
+
+    <style name="cardview_image_small">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/ellipse</item>
+        <item name="tint">?attr/colorControlActivated</item>
+    </style>
+
+    <style name="cardview_btn_select" parent="cardview_image_small">
+        <item name="android:src">@drawable/arrow_fwd</item>
+    </style>
+
     <style name="main_style_button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
@@ -17,90 +92,12 @@
         <item name="iconTint">@color/black</item>
     </style>
 
-    <style name="base_style_layout" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_marginHorizontal">0dp</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="android:insetTop">0dp</item>
+    <style name="cardview_style">
+        <item name="android:backgroundTint">?attr/colorSecondary</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">4dp</item>
     </style>
-
-    <style name="base_style_layout_horizontal" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/margin_8</item>
-        <item name="android:layout_marginStart">@dimen/margin_16</item>
-        <item name="android:background">@drawable/shape</item>
-        <item name="android:layout_marginEnd">@dimen/margin_16</item>
-        <item name="android:orientation">horizontal</item>
-    </style>
-    <style name="my_style_settings" parent="base_style_layout">
-        <item name="android:layout_marginTop">@dimen/layout_marginTop</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="style_settings_layout" parent="my_style_settings">
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_height">@dimen/layout_height_settings_button</item>
-
-    </style>
-
-    <style name="settings_text" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:layout_weight">3</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:paddingHorizontal">@dimen/paddingHorizontal</item>
-        <item name="marginHorizontal">@dimen/margin_16</item>
-        <item name="backgroundTint">@color/white</item>
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColor">?attr/colorSecondaryVariant</item>
-        <item name="android:textSize">@dimen/text_base_size</item>
-    </style>
-
-    <style name="settings_image" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginHorizontal">@dimen/dp_12</item>
-    </style>
-
-    <style name="toolbar_style" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textSize">@dimen/text_main_size</item>
-    </style>
-
-    <style name="search_edit_text" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:drawableLeft">@drawable/ic_search</item>
-        <item name="android:drawableTint">?attr/colorBackgroundFloating</item>
-        <item name="android:drawablePadding">@dimen/margin_8</item>
-        <item name="android:hint">@string/search</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:textColorHint">?attr/colorBackgroundFloating</item>
-        <item name="android:inputType">text</item>
-        <item name="android:lines">1</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:paddingHorizontal">@dimen/dp_12</item>
-        <item name="android:paddingVertical">@dimen/paddingVertical_9</item>
-        <item name="android:textSize">@dimen/text_base_size</item>
-    </style>
-
-    <style name="search_image_view" parent="Theme.MaterialComponents.DayNight">
-
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <!--        <item name="android:layout_marginStart">@dimen/margin_14</item>-->
-        <!--        <item name="android:layout_marginBottom">0dp</item>-->
-        <item name="tint">?attr/colorBackgroundFloating</item>
-    </style>
-
-
 </resources>
