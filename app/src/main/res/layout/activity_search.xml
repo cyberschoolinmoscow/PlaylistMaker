@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="0dp"
+    android:layout_weight="3"
+    android:insetTop="0dp"
+    android:insetBottom="0dp"
+    android:orientation="vertical">
+
+    <include layout="@layout/search_toolbar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:background="@drawable/shape"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_search"
+            style="@style/search_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+            android:paddingHorizontal="@dimen/dp_12"
+            android:paddingVertical="@dimen/paddingVertical_9" />
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            style="@style/search_image_view"
+            android:layout_gravity="center|end"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/trackList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_16" />
+</LinearLayout>
