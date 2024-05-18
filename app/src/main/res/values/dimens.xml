@@ -15,7 +15,7 @@
     <dimen name="margin_vertical">16dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
     <!--    <dimen name="corner_radius_pic">2dp</dimen>-->
-    <dimen name="corner_radius_pic">40dp</dimen>
+    <dimen name="corner_radius_pic">4dp</dimen>
     <dimen name="layout_marginTop">20dp</dimen>
     <!--    <dimen name="layout_height_settings_button">61dp</dimen>-->
     <dimen name="layout_height_settings_button">64dp</dimen>
