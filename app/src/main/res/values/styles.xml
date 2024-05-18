@@ -60,11 +60,14 @@
         <item name="tint">?attr/colorBackgroundFloating</item>
     </style>
 
-    <style name="cardview_image_style">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:src">@drawable/placeholder</item>
-        <item name="cornerRadius">@dimen/corner_radius_pic</item>
-    </style>
+    <!--    <style name="cardview_image_style" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+    <!--        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>-->
+    <!--        <item name="android:scaleType">centerCrop</item>-->
+    <!--&lt;!&ndash;        <item name="android:shape">@drawable/shape</item>&ndash;&gt;-->
+    <!--        <item name="android:src">@drawable/shape1</item>-->
+    <!--&lt;!&ndash;        <item name="android:src">@drawable/placeholder</item>&ndash;&gt;-->
+    <!--        <item name="cornerRadius">@dimen/corner_radius_pic</item>-->
+    <!--    </style>-->
 
     <style name="cardview_image_small">
         <item name="android:scaleType">centerCrop</item>
@@ -93,11 +96,16 @@
     </style>
 
     <style name="cardview_style">
-        <item name="android:backgroundTint">?attr/colorSecondary</item>
+        <item name="android:backgroundTint">?colorSecondary</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="cardCornerRadius">8dp</item>
         <item name="cardElevation">4dp</item>
+    </style>
+
+    <style name="customRoundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 </resources>
