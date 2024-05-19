@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="main_style_layout">
         <item name="android:background">?attr/colorPrimary</item>>
@@ -88,6 +88,11 @@
 
     <style name="cardview_style">
         <item name="android:backgroundTint">?colorSecondary</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="p">
+            @android:color/transparent
+        </item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="p">@android:color/transparent
+        </item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="cardElevation">@dimen/dp_4</item>
@@ -99,4 +104,6 @@
         <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
+
+    <color name="transparent">#00000000</color>
 </resources>

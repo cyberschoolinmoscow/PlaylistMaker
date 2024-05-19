@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/cardview_style"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -20,6 +21,7 @@
             android:layout_marginStart="@dimen/dp_12" />
 
         <LinearLayout
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/margin_14"
@@ -29,6 +31,7 @@
 
 
             <TextView
+                tools:text="Track Name"
                 android:id="@+id/trackName"
                 style="@style/text_main"
                 android:layout_width="wrap_content"
@@ -41,6 +44,7 @@
                 android:layout_marginTop="@dimen/_1dp">
 
                 <TextView
+                    tools:text="Track Name"
                     android:id="@+id/artistName"
                     style="@style/cardview_text_small"
                     android:layout_width="wrap_content"
@@ -55,6 +59,7 @@
                     android:layout_marginHorizontal="@dimen/margin_5" />
 
                 <TextView
+                    tools:text="Track Name"
                     android:id="@+id/trackTime"
                     style="@style/cardview_text_small"
                     android:layout_width="wrap_content"

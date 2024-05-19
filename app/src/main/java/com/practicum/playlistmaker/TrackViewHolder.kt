@@ -8,20 +8,13 @@ import com.bumptech.glide.Glide
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val trackName: TextView
-    private val artistName: TextView
-    private val trackTime: TextView
-    private val artistImage: ImageView
-
-    init {
-        trackName = itemView.findViewById(R.id.trackName)
-        artistName = itemView.findViewById(R.id.artistName)
-        trackTime = itemView.findViewById(R.id.trackTime)
-        artistImage = itemView.findViewById(R.id.artistImage)
-    }
+    private val trackName: TextView = itemView.findViewById(R.id.trackName)
+    private val artistName: TextView = itemView.findViewById(R.id.artistName)
+    private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
+    private val artistImage: ImageView = itemView.findViewById(R.id.artistImage)
 
     fun bind(model: Track) {
-        trackName.text = "#${model.trackName}"
+        trackName.text = "${model.trackName}"
         artistName.text = model.artistName
         trackTime.text = model.trackTime
 
