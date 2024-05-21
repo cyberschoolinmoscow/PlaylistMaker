@@ -7,6 +7,7 @@
     android:layout_weight="3"
     android:insetTop="0dp"
     android:insetBottom="0dp"
+    android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
     <include layout="@layout/search_toolbar" />
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_vertical"
             android:paddingHorizontal="@dimen/dp_12"
-            android:paddingVertical="@dimen/paddingVertical_9" />
+            android:paddingVertical="@dimen/paddingVertical_8" />
 
         <ImageView
             android:id="@+id/iv_clear"
