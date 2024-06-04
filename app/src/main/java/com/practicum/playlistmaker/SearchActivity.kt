@@ -108,6 +108,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchRequest(text: String) {
+        placeholderLayout.isVisible = false
         imdbService.findTrack(text).enqueue(object :
             Callback<TrackResponse> {
 
