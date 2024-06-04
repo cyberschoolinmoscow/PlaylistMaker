@@ -44,9 +44,10 @@
     <LinearLayout
         android:id="@+id/placeholder_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_102dp"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/placeholder_message"
@@ -65,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_24dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:text="@string/update"
             style="@style/search_act_btn_update" />
 

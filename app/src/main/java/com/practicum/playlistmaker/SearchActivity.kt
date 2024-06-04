@@ -69,6 +69,7 @@ class SearchActivity : AppCompatActivity() {
                     savedInstanceState?.putString(Companion.INPUT_STRING, input)
                 }
                 clearButton.isVisible = clearButtonVisibility(s)
+                placeholderLayout.isVisible = false
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -105,8 +106,7 @@ class SearchActivity : AppCompatActivity() {
                                 if (response.body()?.results?.isNotEmpty() == true) {
                                     tracks.addAll(response.body()?.results!!)
                                     trackAdapter.notifyDataSetChanged()
-                                }
-                                if (tracks.isEmpty()) {
+                                } else if (tracks.isEmpty()) {
 //                                    val internet: Int = R.drawable.internet
                                     showMessage(
                                         getString(R.string.nothing_found),
@@ -114,9 +114,10 @@ class SearchActivity : AppCompatActivity() {
                                         R.drawable.nothing,
                                         false
                                     )
-                                } else {
-                                    showMessage("", "", 0, false)
                                 }
+//                                else {
+//                                    showMessage("", "", 0, false)
+//                                }
                             } else {
                                 showMessage(
                                     getString(R.string.something_went_wrong),
