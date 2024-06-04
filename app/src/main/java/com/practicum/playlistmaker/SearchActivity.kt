@@ -94,56 +94,65 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
                 if (inputEditText.text.isNotEmpty()) {
-                    imdbService.findTrack(inputEditText.text.toString()).enqueue(object :
-                        Callback<TrackResponse> {
-
-                        override fun onResponse(
-                            call: Call<TrackResponse>,
-                            response: Response<TrackResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                tracks.clear()
-                                if (response.body()?.results?.isNotEmpty() == true) {
-                                    tracks.addAll(response.body()?.results!!)
-                                    trackAdapter.notifyDataSetChanged()
-                                } else if (tracks.isEmpty()) {
-//                                    val internet: Int = R.drawable.internet
-                                    showMessage(
-                                        getString(R.string.nothing_found),
-                                        "",
-                                        R.drawable.nothing,
-                                        false
-                                    )
-                                }
-//                                else {
-//                                    showMessage("", "", 0, false)
-//                                }
-                            } else {
-                                showMessage(
-                                    getString(R.string.something_went_wrong),
-                                    response.code().toString(),
-                                    R.drawable.internet,
-                                    true
-                                )
-                            }
-                        }
-
-                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                            showMessage(
-                                getString(R.string.something_went_wrong),
-                                t.message.toString(),
-                                R.drawable.internet,
-                                true
-                            )
-
-                        }
-
-                    })
+                    searchRequest(inputEditText.text.toString())
                 }
                 true
             }
             false
         }
+        buttonUpdate.setOnClickListener {
+            if (inputEditText.text.isNotEmpty()) {
+                searchRequest(inputEditText.text.toString())
+            }
+        }
+    }
+
+    private fun searchRequest(text: String) {
+        imdbService.findTrack(text).enqueue(object :
+            Callback<TrackResponse> {
+
+            override fun onResponse(
+                call: Call<TrackResponse>,
+                response: Response<TrackResponse>
+            ) {
+                if (response.code() == 200) {
+                    tracks.clear()
+                    if (response.body()?.results?.isNotEmpty() == true) {
+                        tracks.addAll(response.body()?.results!!)
+                        trackAdapter.notifyDataSetChanged()
+                    } else if (tracks.isEmpty()) {
+//                                    val internet: Int = R.drawable.internet
+                        showMessage(
+                            getString(R.string.nothing_found),
+                            "",
+                            R.drawable.nothing,
+                            false
+                        )
+                    }
+//                                else {
+//                                    showMessage("", "", 0, false)
+//                                }
+                } else {
+                    showMessage(
+                        getString(R.string.something_went_wrong),
+                        response.code().toString(),
+                        R.drawable.internet,
+                        true
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                showMessage(
+                    getString(R.string.something_went_wrong),
+                    t.message.toString(),
+                    R.drawable.internet,
+                    true
+                )
+
+            }
+
+        })
     }
 
     private fun showMessage(
