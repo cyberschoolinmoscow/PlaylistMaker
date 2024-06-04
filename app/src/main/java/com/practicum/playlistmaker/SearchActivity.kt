@@ -7,21 +7,47 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textview.MaterialTextView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class SearchActivity : AppCompatActivity() {
+
+    private val imdbBaseUrl = "https://itunes.apple.com"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(imdbBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val imdbService = retrofit.create(IMDbApi::class.java)
+    private val tracks = ArrayList<Track>()
+    private var trackAdapter: TrackAdapter = TrackAdapter(tracks)
     private lateinit var inputEditText: EditText
+    private lateinit var placeholderLayout: LinearLayout
+    private lateinit var placeholderMessage: MaterialTextView
+    private lateinit var buttonUpdate: MaterialButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
         inputEditText = findViewById(R.id.et_search)
+        placeholderLayout = findViewById(R.id.placeholder_layout)
+        placeholderMessage = findViewById(R.id.placeholder_message)
+        buttonUpdate = findViewById(R.id.button_update)
+
         val clearButton: ImageView = findViewById(R.id.iv_clear)
 
         clearButton.setOnClickListener {
@@ -58,7 +84,88 @@ class SearchActivity : AppCompatActivity() {
         val recycler = findViewById<RecyclerView>(R.id.trackList)
         recycler.layoutManager = LinearLayoutManager(this)
 //        recycler.adapter =if(isOnline(this))  {TrackAdapter(tracks = getTracks())  }else{null}
-        recycler.adapter = TrackAdapter(tracks = getTracks())
+
+//        trackAdapter = TrackAdapter(tracks = tracks)
+
+        recycler.adapter = trackAdapter
+
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
+                if (inputEditText.text.isNotEmpty()) {
+                    imdbService.findTrack(inputEditText.text.toString()).enqueue(object :
+                        Callback<TrackResponse> {
+
+                        override fun onResponse(
+                            call: Call<TrackResponse>,
+                            response: Response<TrackResponse>
+                        ) {
+                            if (response.code() == 200) {
+                                tracks.clear()
+                                if (response.body()?.results?.isNotEmpty() == true) {
+                                    tracks.addAll(response.body()?.results!!)
+                                    trackAdapter.notifyDataSetChanged()
+                                }
+                                if (tracks.isEmpty()) {
+//                                    val internet: Int = R.drawable.internet
+                                    showMessage(
+                                        getString(R.string.nothing_found),
+                                        "",
+                                        R.drawable.nothing,
+                                        false
+                                    )
+                                } else {
+                                    showMessage("", "", 0, false)
+                                }
+                            } else {
+                                showMessage(
+                                    getString(R.string.something_went_wrong),
+                                    response.code().toString(),
+                                    R.drawable.internet,
+                                    true
+                                )
+                            }
+                        }
+
+                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                            showMessage(
+                                getString(R.string.something_went_wrong),
+                                t.message.toString(),
+                                R.drawable.internet,
+                                true
+                            )
+
+                        }
+
+                    })
+                }
+                true
+            }
+            false
+        }
+    }
+
+    private fun showMessage(
+        text: String,
+        additionalMessage: String,
+        drawable: Int,
+        visibility: Boolean
+    ) {
+        if (text.isNotEmpty()) {
+            placeholderLayout.isVisible = true
+            buttonUpdate.isVisible = visibility
+            tracks.clear()
+            trackAdapter.notifyDataSetChanged()
+            placeholderMessage.text = text
+
+            placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0)
+//            if (additionalMessage.isNotEmpty()) {
+//                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+//                    .show()
+//            }
+        } else {
+            placeholderMessage.isVisible = false
+        }
     }
 
     fun isOnline(context: Context): Boolean {
