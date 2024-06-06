@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="0dp"
     android:layout_weight="3"
     android:insetTop="0dp"
@@ -23,6 +24,8 @@
 
         <EditText
             android:id="@+id/et_search"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             style="@style/search_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,6 +40,37 @@
             android:src="@drawable/ic_clear"
             android:visibility="gone" />
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/placeholder_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_102dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/placeholder_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/_24dp"
+            android:layout_marginTop="@dimen/_16dp"
+            android:drawableTop="@drawable/internet"
+            tools:text="@string/nothing_found"
+            style="@style/search_act_message" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_24dp"
+            android:visibility="gone"
+            android:text="@string/update"
+            style="@style/search_act_btn_update" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackList"
