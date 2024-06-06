@@ -1,12 +1,9 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -27,9 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private val imdbBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
-        .baseUrl(imdbBaseUrl)
+        .baseUrl(Companion.imdbBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val imdbService = retrofit.create(IMDbApi::class.java)
@@ -108,78 +104,44 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TrackResponse>,
                     response: Response<TrackResponse>
                 ) {
-                    if (response.code() == 200) {
+                    var queryStatus: QueryStatus = if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
                             trackAdapter.notifyDataSetChanged()
-                        } else if (tracks.isEmpty()) {
-                            showMessage(
-                                getString(R.string.nothing_found),
-                                R.drawable.nothing,
-                                false
-                            )
+                            QueryStatus.SUCCESS
+                        } else {
+                            QueryStatus.NOT_FOUND
                         }
                     } else {
-                        showMessage(
-                            getString(R.string.something_went_wrong),
-                            R.drawable.internet,
-                            true
-                        )
+                        QueryStatus.NO_INTERNET
                     }
+                    showMessage(queryStatus)
                 }
 
-                override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                    showMessage(
-                        getString(R.string.something_went_wrong),
-                        R.drawable.internet,
-                        true
-                    )
-
-                }
+                override fun onFailure(call: Call<TrackResponse>, t: Throwable) =
+                    showMessage(QueryStatus.NO_INTERNET)
 
             })
         }
     }
 
-    private fun showMessage(
-        text: String,
-        drawable: Int,
-        visibility: Boolean
-    ) {
-        if (text.isNotEmpty()) {
+    private fun showMessage(queryStatus: QueryStatus) {
+        if (queryStatus.message != -1) {
             placeholderLayout.isVisible = true
-            buttonUpdate.isVisible = visibility
+            buttonUpdate.isVisible = queryStatus.visibility
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
-            placeholderMessage.text = text
-
-            placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0)
+            placeholderMessage.text = getString(queryStatus.message)
+            placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(
+                0,
+                queryStatus.drawable,
+                0,
+                0
+            )
         } else {
-            placeholderMessage.isVisible = false
+            placeholderLayout.isVisible = false
         }
-    }
-
-    fun isOnline(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (connectivityManager != null) {
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    return true
-                }
-            }
-        }
-        return false
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -191,7 +153,13 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val INPUT_STRING = "input"
+        const val imdbBaseUrl = "https://itunes.apple.com"
     }
 
+    enum class QueryStatus(val message: Int, val drawable: Int, val visibility: Boolean) {
+        NOT_FOUND(R.string.nothing_found, R.drawable.nothing, false),
+        NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true),
+        SUCCESS(-1, 0, false)
+    }
 }
 
