@@ -2,10 +2,11 @@ package com.practicum.playlistmaker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter(
-    private val tracks: List<Track>
+    private var tracks: List<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -15,8 +16,38 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+
+        val itemClickListener: OnItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(item: Track) {
+                TrackPreferences.writeTrack(item)
+            }
+        }
+        holder.bind(tracks[position], itemClickListener)
     }
 
     override fun getItemCount() = tracks.size
+
+    fun updateTracks(newTracks: List<Track>) {
+        val oldTracks = tracks
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int {
+                return oldTracks.size
+            }
+
+            override fun getNewListSize(): Int {
+                return newTracks.size
+            }
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldTracks[oldItemPosition].trackId == newTracks[newItemPosition].trackId
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldTracks[oldItemPosition].trackId == newTracks[newItemPosition].trackId
+            }
+
+        })
+        tracks = newTracks.toMutableList()
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
