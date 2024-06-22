@@ -59,7 +59,7 @@
                     android:layout_marginHorizontal="@dimen/margin_5" />
 
                 <TextView
-                    tools:text="Track Name"
+                    tools:text="Track time"
                     android:id="@+id/trackTime"
                     style="@style/cardview_text_small"
                     android:layout_width="wrap_content"
