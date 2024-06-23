@@ -15,7 +15,6 @@
     <style name="cardview_text_small" parent="text_main">
         <item name="android:textColor">?attr/colorControlActivated</item>
         <item name="android:textSize">@dimen/text_small_size</item>
-        <item name="android:textAppearance">center</item>
     </style>
 
     <style name="settings_text" parent="text_main">

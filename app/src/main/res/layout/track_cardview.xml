@@ -48,7 +48,7 @@
                     android:id="@+id/artistName"
                     style="@style/cardview_text_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_12"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
 
                 <ImageView
@@ -63,7 +63,7 @@
                     android:id="@+id/trackTime"
                     style="@style/cardview_text_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_12"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
 
             </LinearLayout>
