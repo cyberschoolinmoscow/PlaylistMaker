@@ -25,27 +25,39 @@
         android:orientation="vertical">
 
 
-        <LinearLayout
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="@dimen/layout_height_settings_button"-->
+        <!--            android:layout_marginHorizontal="0dp"-->
+        <!--            android:layout_marginTop="0dp"-->
+        <!--            android:insetTop="0dp"-->
+        <!--            android:insetBottom="0dp"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:layout_gravity="center_vertical">-->
+
+        <!--            <TextView-->
+        <!--                style="@style/settings_text"-->
+        <!--                android:text="@string/dark_theme" />-->
+
+        <!--            <androidx.appcompat.widget.SwitchCompat-->
+        <!--                android:id="@+id/switchBtn"-->
+        <!--                style="@style/settings_image"-->
+        <!--                app:trackTint="?attr/colorButtonNormal"-->
+        <!--                app:thumbTint="?attr/colorContainer" />-->
+
+
+        <!--        </LinearLayout>-->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
+            android:text="@string/dark_theme"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="@dimen/text_base_size"
+            app:trackTint="?attr/colorButtonNormal"
+            app:thumbTint="?attr/colorContainer"
+            android:layout_marginHorizontal="@dimen/_16dp"
+            android:layout_gravity="start"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/layout_height_settings_button"
-            android:layout_marginHorizontal="0dp"
-            android:layout_marginTop="0dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
-
-            <TextView
-                style="@style/settings_text"
-                android:text="@string/dark_theme" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchBtn"
-                style="@style/settings_image"
-                app:trackTint="?attr/colorButtonNormal"
-                app:thumbTint="?attr/colorContainer" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"

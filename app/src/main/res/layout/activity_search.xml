@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="0dp"
     android:layout_weight="3"
+    android:background="?attr/colorSecondary"
     android:insetTop="0dp"
     android:insetBottom="0dp"
-    android:background="?attr/colorSecondary"
     android:orientation="vertical">
 
     <include layout="@layout/search_toolbar" />
@@ -24,14 +24,14 @@
 
         <EditText
             android:id="@+id/et_search"
-            android:imeOptions="actionDone"
-            android:singleLine="true"
             style="@style/search_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_vertical"
+            android:imeOptions="actionDone"
             android:paddingHorizontal="@dimen/dp_12"
-            android:paddingVertical="@dimen/paddingVertical_8" />
+            android:paddingVertical="@dimen/paddingVertical_8"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/iv_clear"
@@ -51,30 +51,52 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/placeholder_message"
+            style="@style/search_act_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_24dp"
             android:layout_marginTop="@dimen/_16dp"
             android:drawableTop="@drawable/internet"
-            tools:text="@string/nothing_found"
-            style="@style/search_act_message" />
+            tools:text="@string/nothing_found" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_update"
+            style="@style/search_act_btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_24dp"
-            android:visibility="gone"
             android:text="@string/update"
-            style="@style/search_act_btn_update" />
+            android:visibility="gone" />
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_48dp"
+        android:text="@string/was_searched"
+        android:textAlignment="center"
+        android:textAppearance="@style/search_act_message"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trackList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_16" />
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_weight="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_clear_history"
+        style="@style/search_act_btn_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/_24dp"
+        android:text="@string/clear_history"
+        android:visibility="gone" />
 </LinearLayout>

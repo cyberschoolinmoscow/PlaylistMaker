@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +36,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var placeholderMessage: MaterialTextView
     private lateinit var buttonUpdate: MaterialButton
+    private lateinit var button_clear_history: MaterialButton
+    private lateinit var tv_history: AppCompatTextView
+    private lateinit var recycler: RecyclerView
+    var historyList: ArrayList<Track> = ArrayList()
+    val historyAdapter = TrackAdapter(historyList)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -51,6 +57,9 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+            historyList.clear()
+            historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
+            showHistory()
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -78,10 +87,26 @@ class SearchActivity : AppCompatActivity() {
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
 
-        val recycler = findViewById<RecyclerView>(R.id.trackList)
+        recycler = findViewById(R.id.trackList)
         recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = trackAdapter
+        historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
 
+        buttonUpdate.setOnClickListener {
+            searchRequest()
+        }
+
+        button_clear_history = findViewById(R.id.button_clear_history)
+        tv_history = findViewById(R.id.tv_history)
+        button_clear_history.setOnClickListener {
+            TrackPreferences.removeAll()
+            historyList.clear()
+            showHistory()
+        }
+        App.Companion.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+            historyList.clear()
+            historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
+            historyAdapter.updateTracks(historyList)
+        }
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchRequest()
@@ -89,9 +114,18 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
-        buttonUpdate.setOnClickListener {
-            searchRequest()
+        inputEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && inputEditText.text.isEmpty()) {
+                showHistory()
+            }
         }
+    }
+
+    private fun showHistory() {
+        button_clear_history.isVisible = historyList.size > 0
+        tv_history.isVisible = historyList.size > 0
+        recycler.adapter = historyAdapter
+        historyAdapter.updateTracks(historyList)
     }
 
     private fun searchRequest() {
@@ -108,7 +142,8 @@ class SearchActivity : AppCompatActivity() {
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
-                            trackAdapter.notifyDataSetChanged()
+                            recycler.adapter = trackAdapter
+                            trackAdapter.updateTracks(tracks)
                             QueryStatus.SUCCESS
                         } else {
                             QueryStatus.NOT_FOUND
@@ -123,15 +158,22 @@ class SearchActivity : AppCompatActivity() {
                     showMessage(QueryStatus.NO_INTERNET)
 
             })
+        } else {
+            recycler.adapter = historyAdapter
         }
     }
 
     private fun showMessage(queryStatus: QueryStatus) {
+        if (queryStatus == QueryStatus.SUCCESS) {
+            button_clear_history.isVisible = false
+            tv_history.isVisible = false
+            return
+        }
         if (queryStatus.message != -1) {
             placeholderLayout.isVisible = true
             buttonUpdate.isVisible = queryStatus.visibility
             tracks.clear()
-            trackAdapter.notifyDataSetChanged()
+            trackAdapter.updateTracks(tracks)
             placeholderMessage.text = getString(queryStatus.message)
             placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(
                 0,

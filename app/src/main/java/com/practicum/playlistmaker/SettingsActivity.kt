@@ -1,14 +1,11 @@
 package com.practicum.playlistmaker
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SwitchCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -19,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
 
-        val switchBtn: SwitchCompat = findViewById(R.id.switchBtn)
+//        val switchBtn: SwitchCompat = findViewById(R.id.switchBtn)
         val shareBtn: ImageView = findViewById(R.id.iv_share)
         val helpBtn: ImageView = findViewById(R.id.iv_help)
         val agreementBtn: ImageView = findViewById(R.id.iv_agreement)
@@ -46,26 +43,31 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
 
-        var editor: SharedPreferences.Editor
-        val sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE)
-        var nightMode: Boolean = sharedPreferences.getBoolean("nightMode", false)
+//        var editor: SharedPreferences.Editor
+//        val sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE)
+//        var nightMode: Boolean = sharedPreferences.getBoolean("nightMode", false)
+//
+//        if (nightMode) {
+//            switchBtn.isChecked = true
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        }
+//        switchBtn.setOnClickListener {
+//            if (nightMode) {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                editor = sharedPreferences.edit()
+//                editor.putBoolean("nightMode", false)
+//            } else {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                editor = sharedPreferences.edit()
+//                editor.putBoolean("nightMode", true)
+//            }
+//            editor.apply()
+//        }
 
-        if (nightMode) {
-            switchBtn.isChecked = true
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-        switchBtn.setOnClickListener {
-            if (nightMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
 
-                editor = sharedPreferences.edit()
-                editor.putBoolean("nightMode", false)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                editor = sharedPreferences.edit()
-                editor.putBoolean("nightMode", true)
-            }
-            editor.apply()
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
     }
 }
