@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -15,11 +17,20 @@ class TrackAdapter(
         return TrackViewHolder(view)
     }
 
+    lateinit var contex: Context
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
 
         val itemClickListener: OnItemClickListener = object : OnItemClickListener {
             override fun onItemClick(item: Track) {
                 TrackPreferences.writeTrack(item)
+
+                contex.startActivity(
+                    Intent(
+                        contex,
+                        AudioPlayerActivity::class.java
+                    ).putExtra("track", item.serializeTrack())
+                )
+
             }
         }
         holder.bind(tracks[position], itemClickListener)

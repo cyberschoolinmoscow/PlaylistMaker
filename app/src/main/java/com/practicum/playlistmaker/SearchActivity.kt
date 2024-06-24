@@ -119,6 +119,10 @@ class SearchActivity : AppCompatActivity() {
                 showHistory()
             }
         }
+
+        trackAdapter.contex = this
+        historyAdapter.contex = this
+
     }
 
     private fun showHistory() {

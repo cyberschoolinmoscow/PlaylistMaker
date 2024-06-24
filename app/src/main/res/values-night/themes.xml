@@ -26,6 +26,7 @@
         <item name="colorContainer">@color/blue</item>
 
         <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlNormal">@color/darkGrey</item>
 
     </style>
 

@@ -3,14 +3,35 @@ package com.practicum.playlistmaker
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 data class Track(
     val trackId: Int,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
-    val artworkUrl100: String
-)
+    val artworkUrl100: String,
+    val collectionName: String,
+    val releaseDate: Int,
+    val primaryGenreName: String,
+    val country: String
+) {
+    fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+
+    fun serializeTrack(): String = Gson().toJson(this).toString()
+    fun getDuration(): CharSequence? = SimpleDateFormat(
+        "mm:ss",
+        Locale.getDefault()
+    ).format(trackTimeMillis)
+
+    companion object {
+        fun deserializeTrack(json: String?): Track = Gson().fromJson(json, Track::class.java)
+    }
+}
+
+private fun Gson.fromJson(json: Gson, java: Class<Track>): Track =
+    Gson().fromJson(json, Track::class.java)
 
 class TrackPreferences {
     companion object {
@@ -22,11 +43,7 @@ class TrackPreferences {
 
                 Log.e("my", "sharedPreferences.getString(TRACK_KEY, null).toString()")
 
-                val json = sharedPreferences.getString(TRACK_KEY, null)
-//                ?: return emptyList()
-                if (json == null) {
-                    return emptyList()
-                }
+                val json = sharedPreferences.getString(TRACK_KEY, null) ?: return emptyList()
                 Log.e("my", sharedPreferences.getString(TRACK_KEY, null)!!)
                 if (Gson().fromJson(json, Array<Track>::class.java).isNullOrEmpty()) {
                     return emptyList()
@@ -35,11 +52,11 @@ class TrackPreferences {
             }
         }
 
-        const val TRACK_KEY = "TRACK_KEY"
-        const val MAX_TRACKS_SIZE: Int = 10
-        val sharedPreferences: SharedPreferences = App.sharedPreferences
+        private const val TRACK_KEY = "TRACK_KEY"
+        private const val MAX_TRACKS_SIZE: Int = 10
+        private val sharedPreferences: SharedPreferences = App.sharedPreferences
 
-        fun writeTrackList(tracks: ArrayList<Track>?) {
+        private fun writeTrackList(tracks: ArrayList<Track>?) {
             val json = Gson().toJson(tracks)
             sharedPreferences.edit()
                 .putString(TRACK_KEY, json)
