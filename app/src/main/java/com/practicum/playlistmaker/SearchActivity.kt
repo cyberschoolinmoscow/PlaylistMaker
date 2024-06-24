@@ -86,7 +86,8 @@ class SearchActivity : AppCompatActivity() {
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.idSearchToolbar)
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
-
+        trackAdapter.contex = this
+        historyAdapter.contex = this
         recycler = findViewById(R.id.trackList)
         recycler.layoutManager = LinearLayoutManager(this)
         historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
@@ -120,8 +121,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        trackAdapter.contex = this
-        historyAdapter.contex = this
 
     }
 
