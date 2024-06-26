@@ -108,7 +108,8 @@
             app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
             app:layout_constraintStart_toEndOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/play_btn"
-            tools:text="1:30" />
+            android:text="@string/_1_30"
+            tools:text="@string/_1_30" />
 
         <TextView
             android:id="@+id/trackDurationTitle"
