@@ -22,29 +22,28 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 class SearchActivity : AppCompatActivity() {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl(Companion.imdbBaseUrl)
+        .baseUrl(imdbBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val imdbService = retrofit.create(IMDbApi::class.java)
     private val tracks = ArrayList<Track>()
-    private var trackAdapter: TrackAdapter = TrackAdapter(tracks)
+    private val trackAdapter: TrackAdapter = TrackAdapter(tracks, this)
+    private val historyList: ArrayList<Track> = ArrayList()
+    private val historyAdapter = TrackAdapter(historyList, this)
     private lateinit var inputEditText: EditText
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var placeholderMessage: MaterialTextView
     private lateinit var buttonUpdate: MaterialButton
-    private lateinit var button_clear_history: MaterialButton
-    private lateinit var tv_history: AppCompatTextView
+    private lateinit var buttonClearHistory: MaterialButton
+    private lateinit var tvHistory: AppCompatTextView
     private lateinit var recycler: RecyclerView
-    var historyList: ArrayList<Track> = ArrayList()
-    val historyAdapter = TrackAdapter(historyList)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
         inputEditText = findViewById(R.id.et_search)
         placeholderLayout = findViewById(R.id.placeholder_layout)
         placeholderMessage = findViewById(R.id.placeholder_message)
@@ -58,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
             historyList.clear()
-            historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
+            historyList.addAll(TrackPreferences.read(App.sharedPreferences))
             showHistory()
         }
 
@@ -71,7 +70,7 @@ class SearchActivity : AppCompatActivity() {
                 if (!s.isNullOrEmpty()) {
                     val input = s.toString()
 
-                    savedInstanceState?.putString(Companion.INPUT_STRING, input)
+                    savedInstanceState?.putString(INPUT_STRING, input)
                 }
                 clearButton.isVisible = clearButtonVisibility(s)
                 placeholderLayout.isVisible = false
@@ -86,26 +85,25 @@ class SearchActivity : AppCompatActivity() {
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.idSearchToolbar)
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
-        trackAdapter.contex = this
-        historyAdapter.contex = this
+
         recycler = findViewById(R.id.trackList)
         recycler.layoutManager = LinearLayoutManager(this)
-        historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
+        historyList.addAll(TrackPreferences.read(App.sharedPreferences))
 
         buttonUpdate.setOnClickListener {
             searchRequest()
         }
 
-        button_clear_history = findViewById(R.id.button_clear_history)
-        tv_history = findViewById(R.id.tv_history)
-        button_clear_history.setOnClickListener {
+        buttonClearHistory = findViewById(R.id.button_clear_history)
+        tvHistory = findViewById(R.id.tv_history)
+        buttonClearHistory.setOnClickListener {
             TrackPreferences.removeAll()
             historyList.clear()
             showHistory()
         }
-        App.Companion.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+        App.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
             historyList.clear()
-            historyList.addAll(TrackPreferences.read(App.Companion.sharedPreferences))
+            historyList.addAll(TrackPreferences.read(sharedPreferences))
             historyAdapter.updateTracks(historyList)
         }
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -120,13 +118,11 @@ class SearchActivity : AppCompatActivity() {
                 showHistory()
             }
         }
-
-
     }
 
     private fun showHistory() {
-        button_clear_history.isVisible = historyList.size > 0
-        tv_history.isVisible = historyList.size > 0
+        buttonClearHistory.isVisible = historyList.size > 0
+        tvHistory.isVisible = historyList.size > 0
         recycler.adapter = historyAdapter
         historyAdapter.updateTracks(historyList)
     }
@@ -141,7 +137,7 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TrackResponse>,
                     response: Response<TrackResponse>
                 ) {
-                    var queryStatus: QueryStatus = if (response.code() == 200) {
+                    val queryStatus: QueryStatus = if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
@@ -168,8 +164,8 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showMessage(queryStatus: QueryStatus) {
         if (queryStatus == QueryStatus.SUCCESS) {
-            button_clear_history.isVisible = false
-            tv_history.isVisible = false
+            buttonClearHistory.isVisible = false
+            tvHistory.isVisible = false
             return
         }
         if (queryStatus.message != -1) {
@@ -191,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        inputEditText.setText(savedInstanceState.getString(Companion.INPUT_STRING))
+        inputEditText.setText(savedInstanceState.getString(INPUT_STRING))
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()

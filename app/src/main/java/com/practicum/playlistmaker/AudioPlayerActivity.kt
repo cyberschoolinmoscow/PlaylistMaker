@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Group
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 
 
@@ -25,13 +27,18 @@ class AudioPlayerActivity : AppCompatActivity() {
         val releaseDate: TextView = findViewById(R.id.releaseDate)
         val primaryGenreName: TextView = findViewById(R.id.primaryGenreName)
         val country: TextView = findViewById(R.id.country)
+        val collectionGroup: Group = findViewById(R.id.collectionGroup)
         val arguments = intent.extras
         val name = arguments!!.getString("track")
         val track = Track.deserializeTrack(name)
         trackName.text = track.trackName
         artistName.text = track.artistName
         trackDuration.text = track.getDuration()
-        collectionName.text = track.collectionName
+        if (track.collectionName.isNullOrEmpty()) {
+            collectionGroup.isVisible = false
+        } else {
+            collectionName.text = track.collectionName
+        }
         releaseDate.text = track.releaseDate.toString()
         primaryGenreName.text = track.primaryGenreName
         country.text = track.country
@@ -40,5 +47,9 @@ class AudioPlayerActivity : AppCompatActivity() {
             .centerCrop()
             .placeholder(R.drawable.placeholder)
             .into(artistImage)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
     }
 }

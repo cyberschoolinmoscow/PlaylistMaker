@@ -28,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_vertical"
+            android:textCursorDrawable="@drawable/blue_cursor"
             android:imeOptions="actionDone"
             android:paddingHorizontal="@dimen/dp_12"
             android:paddingVertical="@dimen/paddingVertical_8"

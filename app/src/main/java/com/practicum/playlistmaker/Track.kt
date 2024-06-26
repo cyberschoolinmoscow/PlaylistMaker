@@ -89,7 +89,6 @@ class TrackPreferences {
         }
 
         fun removeAll() {
-//            var json = sharedPreferences.getString(TRACK_KEY, null)
             writeTrackList(null)
         }
     }
