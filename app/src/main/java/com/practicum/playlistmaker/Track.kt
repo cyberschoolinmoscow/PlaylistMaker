@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 data class Track(
@@ -13,7 +14,7 @@ data class Track(
     val trackTimeMillis: Int,
     val artworkUrl100: String,
     val collectionName: String,
-    val releaseDate: Int,
+    val releaseDate: Date,
     val primaryGenreName: String,
     val country: String
 ) {
