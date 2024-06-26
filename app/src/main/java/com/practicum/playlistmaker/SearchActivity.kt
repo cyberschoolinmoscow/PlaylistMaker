@@ -48,7 +48,6 @@ class SearchActivity : AppCompatActivity() {
         placeholderLayout = findViewById(R.id.placeholder_layout)
         placeholderMessage = findViewById(R.id.placeholder_message)
         buttonUpdate = findViewById(R.id.button_update)
-
         val clearButton: ImageView = findViewById(R.id.iv_clear)
 
         clearButton.setOnClickListener {

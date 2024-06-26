@@ -39,7 +39,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         } else {
             collectionName.text = track.collectionName
         }
-        releaseDate.text = track.releaseDate.toString()
+        releaseDate.text = track.getReleaseYear()
         primaryGenreName.text = track.primaryGenreName
         country.text = track.country
         Glide.with(this)

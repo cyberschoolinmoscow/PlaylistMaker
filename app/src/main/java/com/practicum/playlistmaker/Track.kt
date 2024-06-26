@@ -19,6 +19,8 @@ data class Track(
     val country: String
 ) {
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+    fun getReleaseYear(): CharSequence? =
+        SimpleDateFormat("yyyy", Locale.getDefault()).format(releaseDate)
 
     fun serializeTrack(): String = Gson().toJson(this).toString()
     fun getDuration(): CharSequence? = SimpleDateFormat(
