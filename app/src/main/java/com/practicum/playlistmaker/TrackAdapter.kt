@@ -1,12 +1,14 @@
 package com.practicum.playlistmaker
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter(
-    private var tracks: List<Track>
+    private var tracks: List<Track>,
+    var contex: SearchActivity
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -20,6 +22,12 @@ class TrackAdapter(
         val itemClickListener: OnItemClickListener = object : OnItemClickListener {
             override fun onItemClick(item: Track) {
                 TrackPreferences.writeTrack(item)
+                contex.startActivity(
+                    Intent(
+                        contex,
+                        AudioPlayerActivity::class.java
+                    ).putExtra("track", item.serializeTrack())
+                )
             }
         }
         holder.bind(tracks[position], itemClickListener)
