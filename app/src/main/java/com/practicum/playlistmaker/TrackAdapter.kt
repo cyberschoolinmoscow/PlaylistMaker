@@ -1,6 +1,8 @@
 package com.practicum.playlistmaker
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,6 +12,22 @@ class TrackAdapter(
     private var tracks: List<Track>,
     var contex: SearchActivity
 ) : RecyclerView.Adapter<TrackViewHolder>() {
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+    private var isClickAllowed = true
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
@@ -21,13 +39,15 @@ class TrackAdapter(
 
         val itemClickListener: OnItemClickListener = object : OnItemClickListener {
             override fun onItemClick(item: Track) {
-                TrackPreferences.writeTrack(item)
-                contex.startActivity(
-                    Intent(
-                        contex,
-                        AudioPlayerActivity::class.java
-                    ).putExtra("track", item.serializeTrack())
-                )
+                if (clickDebounce()) {
+                    TrackPreferences.writeTrack(item)
+                    contex.startActivity(
+                        Intent(
+                            contex,
+                            AudioPlayerActivity::class.java
+                        ).putExtra("track", item.serializeTrack())
+                    )
+                }
             }
         }
         holder.bind(tracks[position], itemClickListener)
