@@ -106,7 +106,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun startPlayer() {
         mediaPlayer.start()
-        play.background = getDrawable(R.drawable.pause)
+        play.background = getDrawable(R.drawable.pause_button)
         playerState = STATE_PLAYING
         updateTrackTime()
     }
