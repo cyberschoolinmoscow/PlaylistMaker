@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,17 +11,33 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var play: ImageButton
+    private lateinit var trackTime: TextView
+
     private var mediaPlayer = MediaPlayer()
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = Runnable { updateTrackTime() }
+
+    private fun updateTrackTime() {
+        if (playerState == STATE_PLAYING) {
+            handler.removeCallbacks(runnable)
+            handler.postDelayed(runnable, TRACK_TIME_UPDATE_DELAY)
+            trackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        }
+    }
 
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+        private const val TRACK_TIME_UPDATE_DELAY = 300L
     }
 
     private var playerState = STATE_DEFAULT
@@ -40,6 +58,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         val primaryGenreName: TextView = findViewById(R.id.primaryGenreName)
         val country: TextView = findViewById(R.id.country)
         val collectionGroup: Group = findViewById(R.id.collectionGroup)
+        trackTime = findViewById(R.id.trackTime)
         play = findViewById(R.id.play_btn)
         val arguments = intent.extras
         val name = arguments!!.getString("track")
@@ -80,6 +99,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             play.background = getDrawable(R.drawable.play_button)
             playerState = STATE_PREPARED
+            handler.removeCallbacks(runnable)
+            trackTime.text = "00:00"
         }
     }
 
@@ -87,12 +108,15 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.start()
         play.background = getDrawable(R.drawable.pause)
         playerState = STATE_PLAYING
+        updateTrackTime()
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         play.background = getDrawable(R.drawable.play_button)
         playerState = STATE_PAUSED
+        handler.removeCallbacks(runnable)
+
     }
 
     private fun playbackControl() {
@@ -115,5 +139,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        handler.removeCallbacks(runnable)
     }
 }
