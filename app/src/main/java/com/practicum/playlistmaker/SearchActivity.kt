@@ -72,10 +72,16 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s.isNullOrEmpty()) {
+                    buttonClearHistory.isVisible = false
+                    tvHistory.isVisible = false
+                    recycler.adapter = null
                     val input = s.toString()
 
                     savedInstanceState?.putString(INPUT_STRING, input)
+
                     searchDebounce()
+                } else {
+                    showHistory()
                 }
                 clearButton.isVisible = clearButtonVisibility(s)
                 placeholderLayout.isVisible = false
@@ -136,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
         if (inputEditText.text.isNotEmpty()) {
             placeholderLayout.isVisible = false
             progressBar.isVisible = true
-
+            var queryStatus: QueryStatus = QueryStatus.WAITING
             imdbService.findTrack(inputEditText.text.toString()).enqueue(object :
                 Callback<TrackResponse> {
 
@@ -146,13 +152,14 @@ class SearchActivity : AppCompatActivity() {
                 ) {
                     progressBar.isVisible = false
 
-                    val queryStatus: QueryStatus = if (response.code() == 200) {
+                    queryStatus = if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
                             recycler.adapter = trackAdapter
                             trackAdapter.updateTracks(tracks)
                             QueryStatus.SUCCESS
+
                         } else {
                             QueryStatus.NOT_FOUND
                         }
@@ -163,8 +170,9 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                    showMessage(QueryStatus.NO_INTERNET)
+                    queryStatus = (QueryStatus.NO_INTERNET)
                     progressBar.isVisible = false
+                    showMessage(queryStatus)
                 }
 
 
@@ -180,7 +188,12 @@ class SearchActivity : AppCompatActivity() {
             tvHistory.isVisible = false
             return
         }
-        if (queryStatus.message != -1) {
+        if (queryStatus == QueryStatus.WAITING) {
+            buttonClearHistory.isVisible = false
+            tvHistory.isVisible = false
+            return
+        }
+        if (queryStatus == QueryStatus.NOT_FOUND || queryStatus == QueryStatus.NO_INTERNET) {
             placeholderLayout.isVisible = true
             buttonUpdate.isVisible = queryStatus.visibility
             tracks.clear()
@@ -192,8 +205,7 @@ class SearchActivity : AppCompatActivity() {
                 0,
                 0
             )
-        } else {
-            placeholderLayout.isVisible = false
+            return
         }
     }
 
@@ -213,6 +225,7 @@ class SearchActivity : AppCompatActivity() {
     enum class QueryStatus(val message: Int, val drawable: Int, val visibility: Boolean) {
         NOT_FOUND(R.string.nothing_found, R.drawable.nothing, false),
         NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true),
+        WAITING(-1, 0, false),
         SUCCESS(-1, 0, false)
     }
 
