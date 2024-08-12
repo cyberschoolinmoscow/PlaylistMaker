@@ -2,6 +2,8 @@ package com.practicum.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
@@ -9,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.isVisible
@@ -40,6 +43,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var buttonClearHistory: MaterialButton
     private lateinit var tvHistory: AppCompatTextView
     private lateinit var recycler: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +52,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderLayout = findViewById(R.id.placeholder_layout)
         placeholderMessage = findViewById(R.id.placeholder_message)
         buttonUpdate = findViewById(R.id.button_update)
+        progressBar = findViewById(R.id.progressBar)
         val clearButton: ImageView = findViewById(R.id.iv_clear)
 
         clearButton.setOnClickListener {
@@ -67,9 +72,16 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s.isNullOrEmpty()) {
+                    buttonClearHistory.isVisible = false
+                    tvHistory.isVisible = false
+                    recycler.adapter = null
                     val input = s.toString()
 
                     savedInstanceState?.putString(INPUT_STRING, input)
+
+                    searchDebounce()
+                } else {
+                    showHistory()
                 }
                 clearButton.isVisible = clearButtonVisibility(s)
                 placeholderLayout.isVisible = false
@@ -127,8 +139,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchRequest() {
-        placeholderLayout.isVisible = false
         if (inputEditText.text.isNotEmpty()) {
+            placeholderLayout.isVisible = false
+            progressBar.isVisible = true
+            var queryStatus: QueryStatus = QueryStatus.WAITING
             imdbService.findTrack(inputEditText.text.toString()).enqueue(object :
                 Callback<TrackResponse> {
 
@@ -136,13 +150,16 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<TrackResponse>,
                     response: Response<TrackResponse>
                 ) {
-                    val queryStatus: QueryStatus = if (response.code() == 200) {
+                    progressBar.isVisible = false
+
+                    queryStatus = if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             tracks.addAll(response.body()?.results!!)
                             recycler.adapter = trackAdapter
                             trackAdapter.updateTracks(tracks)
                             QueryStatus.SUCCESS
+
                         } else {
                             QueryStatus.NOT_FOUND
                         }
@@ -152,8 +169,12 @@ class SearchActivity : AppCompatActivity() {
                     showMessage(queryStatus)
                 }
 
-                override fun onFailure(call: Call<TrackResponse>, t: Throwable) =
-                    showMessage(QueryStatus.NO_INTERNET)
+                override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                    queryStatus = (QueryStatus.NO_INTERNET)
+                    progressBar.isVisible = false
+                    showMessage(queryStatus)
+                }
+
 
             })
         } else {
@@ -167,7 +188,12 @@ class SearchActivity : AppCompatActivity() {
             tvHistory.isVisible = false
             return
         }
-        if (queryStatus.message != -1) {
+        if (queryStatus == QueryStatus.WAITING) {
+            buttonClearHistory.isVisible = false
+            tvHistory.isVisible = false
+            return
+        }
+        if (queryStatus == QueryStatus.NOT_FOUND || queryStatus == QueryStatus.NO_INTERNET) {
             placeholderLayout.isVisible = true
             buttonUpdate.isVisible = queryStatus.visibility
             tracks.clear()
@@ -179,8 +205,7 @@ class SearchActivity : AppCompatActivity() {
                 0,
                 0
             )
-        } else {
-            placeholderLayout.isVisible = false
+            return
         }
     }
 
@@ -194,12 +219,22 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val INPUT_STRING = "input"
         const val imdbBaseUrl = "https://itunes.apple.com"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     enum class QueryStatus(val message: Int, val drawable: Int, val visibility: Boolean) {
         NOT_FOUND(R.string.nothing_found, R.drawable.nothing, false),
         NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true),
+        WAITING(-1, 0, false),
         SUCCESS(-1, 0, false)
+    }
+
+    private val searchRunnable = Runnable { searchRequest() }
+    private val handler = Handler(Looper.getMainLooper())
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+
     }
 }
 
