@@ -1,14 +1,14 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.button.MaterialButton
+import com.practicum.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
     private lateinit var myToolbar: Toolbar
@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             )
         })
 
-        var editor: SharedPreferences.Editor
         val sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE)
         var nightMode: Boolean = sharedPreferences.getBoolean("nightMode", false)
 

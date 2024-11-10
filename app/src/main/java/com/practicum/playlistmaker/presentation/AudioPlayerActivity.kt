@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -11,27 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
-    private lateinit var play: ImageButton
-    private lateinit var trackTime: TextView
-
-    private var mediaPlayer = MediaPlayer()
-    private val handler = Handler(Looper.getMainLooper())
-    private val runnable = Runnable { updateTrackTime() }
-
-    private fun updateTrackTime() {
-        if (playerState == STATE_PLAYING) {
-            handler.removeCallbacks(runnable)
-            handler.postDelayed(runnable, TRACK_TIME_UPDATE_DELAY)
-            trackTime.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        }
-    }
-
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -41,6 +27,14 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private var playerState = STATE_DEFAULT
+
+    private lateinit var play: ImageButton
+    private lateinit var trackTime: TextView
+
+    private var mediaPlayer = MediaPlayer()
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = Runnable { updateTrackTime() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_player)
@@ -87,6 +81,15 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+    }
+
+    private fun updateTrackTime() {
+        if (playerState == STATE_PLAYING) {
+            handler.removeCallbacks(runnable)
+            handler.postDelayed(runnable, TRACK_TIME_UPDATE_DELAY)
+            trackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        }
     }
 
     private fun preparePlayer(url: String) {
