@@ -30,38 +30,13 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val INPUT_STRING = "input"
-
-        //        const val imdbBaseUrl = "https://itunes.apple.com"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
-
-//    private val retrofit = Retrofit.Builder()
-//        .baseUrl(imdbBaseUrl)
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .build()
-//    private val imdbService = retrofit.create(IMDbApiService::class.java)
-
-
-//    private lateinit var inputEditText: EditText
-//    private lateinit var placeholderLayout: LinearLayout
-//    private lateinit var placeholderMessage: MaterialTextView
-//    private lateinit var buttonUpdate: MaterialButton
-//    private lateinit var buttonClearHistory: MaterialButton
-//    private lateinit var tvHistory: AppCompatTextView
-//    private lateinit var recycler: RecyclerView
-//    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-//        setContentView(R.layout.activity_search)
-//        inputEditText = findViewById(R.id.et_search)
-//        placeholderLayout = findViewById(R.id.placeholder_layout)
-//        placeholderMessage = findViewById(R.id.placeholder_message)
-//        buttonUpdate = findViewById(R.id.button_update)
-//        progressBar = findViewById(R.id.progressBar)
-//        val clearButton: ImageView = findViewById(R.id.iv_clear)
         viewBinding.ivClear.setOnClickListener {
             viewBinding.etSearch.setText("")
             val inputMethodManager =
@@ -104,16 +79,12 @@ class SearchActivity : AppCompatActivity() {
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
 
-//        recycler = findViewById(R.id.trackList)
         viewBinding.trackList.layoutManager = LinearLayoutManager(this)
         historyList.addAll(TrackPreferences.read(App.sharedPreferences))
 
         viewBinding.buttonUpdate.setOnClickListener {
             searchRequest()
         }
-
-//        buttonClearHistory = findViewById(R.id.button_clear_history)
-//        tvHistory = findViewById(R.id.tv_history)
         viewBinding.buttonClearHistory.setOnClickListener {
             TrackPreferences.removeAll()
             historyList.clear()
@@ -177,42 +148,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             )
             viewBinding.progressBar.isVisible = false
-
-//            imdbService.findTrack(viewBinding.etSearch.text.toString()).enqueue(object :
-//                Callback<TrackResponse> {
-//
-//                override fun onResponse(
-//                    call: Call<TrackResponse>,
-//                    response: Response<TrackResponse>
-//                ) {
-//                    viewBinding.progressBar.isVisible = false
-//
-//                    queryStatus = if (response.code() == 200) {
-//                        tracks.clear()
-//                        if (response.body()?.results?.isNotEmpty() == true) {
-//                            tracks.addAll(response.body()?.results!!)
-//                            viewBinding.trackList.adapter = trackAdapter
-//                            trackAdapter.updateTracks(tracks)
-//                            QueryStatus.SUCCESS
-//
-//                        } else {
-//                            QueryStatus.NOT_FOUND
-//                        }
-//                    } else {
-//                        QueryStatus.NO_INTERNET
-//                    }
             showMessage(queryStatus)
-//                }
-//
-//                override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-//                    queryStatus = (QueryStatus.NO_INTERNET)
-//                    viewBinding.progressBar.isVisible = false
-//                    showMessage(queryStatus)
-//                }
-//
-//
-//            })
-
         } else {
             viewBinding.trackList.adapter = historyAdapter
         }
@@ -251,7 +187,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
-
 
     enum class QueryStatus(val message: Int, val drawable: Int, val visibility: Boolean) {
         NOT_FOUND(R.string.nothing_found, R.drawable.nothing, false),

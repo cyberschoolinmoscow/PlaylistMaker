@@ -8,20 +8,26 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.domain.SettingsInteractor
 
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var settingsInteractor: SettingsInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.idSettingsToolbar)
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
 
-//        val switchBtn: SwitchCompat = findViewById(R.id.switchBtn)
+
         val shareBtn: ImageView = findViewById(R.id.iv_share)
         val helpBtn: ImageView = findViewById(R.id.iv_help)
         val agreementBtn: ImageView = findViewById(R.id.iv_agreement)
+
+        settingsInteractor = Creator.getSettingInteractor(this)
 
         shareBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
