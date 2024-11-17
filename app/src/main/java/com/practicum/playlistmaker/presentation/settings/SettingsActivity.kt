@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -9,7 +9,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.domain.SettingsInteractor
+import com.practicum.playlistmaker.domain.api.SettingsInteractor
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -76,6 +76,7 @@ class SettingsActivity : AppCompatActivity() {
 
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
+            settingsInteractor.setDarkTheme(checked)
         }
     }
 }

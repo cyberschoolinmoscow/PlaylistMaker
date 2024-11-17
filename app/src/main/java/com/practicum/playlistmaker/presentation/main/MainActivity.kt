@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.main
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.button.MaterialButton
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.presentation.mediateka.MediatekaActivity
+import com.practicum.playlistmaker.presentation.settings.SettingsActivity
+import com.practicum.playlistmaker.presentation.tracks.SearchActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var myToolbar: Toolbar

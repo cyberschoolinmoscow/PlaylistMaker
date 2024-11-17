@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorSecondary"
-            tools:context=".presentation.AudioPlayerActivity">
+            tools:context=".presentation.audioplayer.AudioPlayerActivity">
 
             <include layout="@layout/search_toolbar" />
 

@@ -10,7 +10,7 @@
     android:insetTop="0dp"
     android:insetBottom="0dp"
     android:orientation="vertical"
-    tools:context=".presentation.SearchActivity">
+    tools:context=".presentation.tracks.SearchActivity">
 
     <include layout="@layout/search_toolbar" />
 

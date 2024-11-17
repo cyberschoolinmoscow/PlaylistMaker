@@ -1,11 +1,16 @@
-package com.practicum.playlistmaker.data
+package com.practicum.playlistmaker.data.network
 
+import com.practicum.playlistmaker.data.NetworkClient
 import com.practicum.playlistmaker.data.dto.TrackResponse
 import com.practicum.playlistmaker.data.dto.TracksSearchRequest
+import com.practicum.playlistmaker.data.preferences.TrackManager
 import com.practicum.playlistmaker.domain.api.TracksRepository
 import com.practicum.playlistmaker.domain.models.Track
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val trackManager: TrackManager
+) : TracksRepository {
 
     override fun searchTracks(expression: String): List<Track> {
 
@@ -30,5 +35,17 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
         } else {
             return emptyList()
         }
+    }
+
+    override fun clearHistory() {
+        trackManager.clearHistory()
+    }
+
+    override fun addHistory(): List<Track> {
+        return trackManager.read()
+    }
+
+    override fun addTrack(item: Track) {
+        trackManager.writeTrack(item)
     }
 }

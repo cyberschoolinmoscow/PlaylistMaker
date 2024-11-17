@@ -1,6 +1,7 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.tracks
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,20 +12,53 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.TrackPreferences
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.api.TracksInteractor
 import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.audioplayer.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
+    private lateinit var trackInteractor: TracksInteractor
     private val tracks = ArrayList<Track>()
 
-    private val trackAdapter: TrackAdapter = TrackAdapter(tracks, this)
+    private val trackAdapter: TrackAdapter = TrackAdapter(tracks, this, onTrackClick())
+
+
+    private var isClickAllowed = true
+
+//    private val handler = Handler(Looper.getMainLooper())
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, SEARCH_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun onTrackClick(): TrackAdapter.OnTrackClickListener {
+        return object : TrackAdapter.OnTrackClickListener {
+            override fun onTrackClick(track: Track) {
+                if (clickDebounce()) {
+                    trackInteractor.addTrack(track)
+//                    TrackPreferences.writeTrack(item)
+//                    Intent(this@SearchActivity, PlayerActivity::class.java)
+                    this@SearchActivity.startActivity(
+                        Intent(
+                            this@SearchActivity,
+                            AudioPlayerActivity::class.java
+                        ).putExtra("track", track.serializeTrack())
+                    )
+                }
+            }
+        }
+    }
+
     private val historyList: ArrayList<Track> = ArrayList()
-    private val historyAdapter = TrackAdapter(historyList, this)
+    private val historyAdapter = TrackAdapter(historyList, this, onTrackClick())
 
     private lateinit var viewBinding: ActivitySearchBinding
 
@@ -37,13 +71,20 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
+        trackInteractor = Creator.provideTracksInteractor(this)
+
+
         viewBinding.ivClear.setOnClickListener {
             viewBinding.etSearch.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(viewBinding.etSearch.windowToken, 0)
+//            trackInteractor.clearHistory()
+
             historyList.clear()
-            historyList.addAll(TrackPreferences.read(App.sharedPreferences))
+            historyList.addAll(trackInteractor.addHistory())
+
             showHistory()
         }
 
@@ -80,21 +121,25 @@ class SearchActivity : AppCompatActivity() {
         myToolbar.setNavigationOnClickListener { finish() }
 
         viewBinding.trackList.layoutManager = LinearLayoutManager(this)
-        historyList.addAll(TrackPreferences.read(App.sharedPreferences))
+
+        historyList.addAll(trackInteractor.addHistory())
 
         viewBinding.buttonUpdate.setOnClickListener {
             searchRequest()
         }
         viewBinding.buttonClearHistory.setOnClickListener {
-            TrackPreferences.removeAll()
+//            TrackPreferences.removeAll()
+            trackInteractor.clearHistory()
             historyList.clear()
             showHistory()
         }
-        App.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
-            historyList.clear()
-            historyList.addAll(TrackPreferences.read(sharedPreferences))
-            historyAdapter.updateTracks(historyList)
-        }
+
+//        App.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
+//            historyList.clear()
+//            historyList.addAll(TrackPreferences.read(sharedPreferences))
+//            historyAdapter.updateTracks(historyList)
+//        }
+
         viewBinding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 searchRequest()
@@ -122,7 +167,7 @@ class SearchActivity : AppCompatActivity() {
             viewBinding.progressBar.isVisible = true
             var queryStatus: QueryStatus = QueryStatus.WAITING
 
-            val tracksInteractor = Creator.provideTracksInteractor()
+            val tracksInteractor = Creator.provideTracksInteractor(this)
             tracksInteractor.searchTracks(viewBinding.etSearch.text.toString(),
                 object : TracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: List<Track>) {
@@ -200,6 +245,15 @@ class SearchActivity : AppCompatActivity() {
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+//        trackInteractor.saveSearchedTracks(.tracks)
+//        historyList.clear()
+//        historyList.addAll(TrackPreferences.read(sharedPreferences))
+//        historyAdapter.updateTracks(historyList)
 
     }
 }

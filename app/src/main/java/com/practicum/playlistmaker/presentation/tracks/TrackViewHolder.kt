@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.tracks
 
 import android.view.View
 import android.widget.ImageView
@@ -15,7 +15,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
     private val artistImage: ImageView = itemView.findViewById(R.id.artistImage)
 
-    fun bind(model: Track, onItemClickListener: OnItemClickListener) {
+    fun bind(model: Track) {
         trackName.text = model.trackName
         artistName.text = model.artistName
         trackTime.text = model.getDuration()
@@ -24,9 +24,9 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .centerCrop()
             .placeholder(R.drawable.placeholder)
             .into(artistImage)
-        itemView.setOnClickListener {
-            onItemClickListener.onItemClick(model)
-        }
+//        itemView.setOnClickListener {
+//            onItemClickListener.onItemClick(model)
+//        }
     }
 }
 
