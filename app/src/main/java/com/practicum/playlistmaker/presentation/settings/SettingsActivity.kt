@@ -3,80 +3,52 @@ package com.practicum.playlistmaker.presentation.settings
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.domain.api.SettingsInteractor
 
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var viewBinding: ActivitySettingsBinding
+
     private lateinit var settingsInteractor: SettingsInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
+        viewBinding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.idSettingsToolbar)
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
 
+        settingsInteractor = Creator.getSettingInteractor()
 
-        val shareBtn: ImageView = findViewById(R.id.iv_share)
-        val helpBtn: ImageView = findViewById(R.id.iv_help)
-        val agreementBtn: ImageView = findViewById(R.id.iv_agreement)
-
-        settingsInteractor = Creator.getSettingInteractor(this)
-
-        shareBtn.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            val shareBody = getString(R.string.share_btn_link)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, shareBody)
-            startActivity(Intent.createChooser(intent, "Share"))
+        viewBinding.ivShare.setOnClickListener {
+            settingsInteractor.share()
         }
-        helpBtn.setOnClickListener {
-            val message = getString(R.string.help_btn_message)
-            val subject = getString(R.string.help_btn_subject)
-            val shareIntent = Intent(Intent.ACTION_SENDTO)
-            shareIntent.data = Uri.parse("mailto:")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email)))
-            shareIntent.putExtra(Intent.EXTRA_TEXT, message)
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-            startActivity(shareIntent)
+
+        viewBinding.ivHelp.setOnClickListener {
+            settingsInteractor.help()
         }
-        agreementBtn.setOnClickListener {
+
+        viewBinding.ivAgreement.setOnClickListener {
             val url = getString(R.string.agreementLink)
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
-
-//        var editor: SharedPreferences.Editor
-//        val sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE)
-//        var nightMode: Boolean = sharedPreferences.getBoolean("nightMode", false)
-//
-//        if (nightMode) {
-//            switchBtn.isChecked = true
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//        }
-//        switchBtn.setOnClickListener {
-//            if (nightMode) {
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//                editor = sharedPreferences.edit()
-//                editor.putBoolean("nightMode", false)
-//            } else {
-//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//                editor = sharedPreferences.edit()
-//                editor.putBoolean("nightMode", true)
-//            }
-//            editor.apply()
-//        }
-
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        viewBinding.themeSwitcher.isChecked = App.darkTheme
+        viewBinding.themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
             settingsInteractor.setDarkTheme(checked)
+            settingsInteractor.setDarkTheme(viewBinding.themeSwitcher.isChecked)
+            App.darkTheme = settingsInteractor.getDarkTheme()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        settingsInteractor.setDarkTheme(viewBinding.themeSwitcher.isChecked)
+        App.darkTheme = settingsInteractor.getDarkTheme()
     }
 }

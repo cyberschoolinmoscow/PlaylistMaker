@@ -24,9 +24,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .centerCrop()
             .placeholder(R.drawable.placeholder)
             .into(artistImage)
-//        itemView.setOnClickListener {
-//            onItemClickListener.onItemClick(model)
-//        }
     }
 }
 

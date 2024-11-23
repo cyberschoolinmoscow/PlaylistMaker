@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
@@ -23,12 +24,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackInteractor: TracksInteractor
     private val tracks = ArrayList<Track>()
 
-    private val trackAdapter: TrackAdapter = TrackAdapter(tracks, this, onTrackClick())
+    private val trackAdapter: TrackAdapter = TrackAdapter(tracks, onTrackClick())
 
 
     private var isClickAllowed = true
-
-//    private val handler = Handler(Looper.getMainLooper())
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -44,13 +43,10 @@ class SearchActivity : AppCompatActivity() {
             override fun onTrackClick(track: Track) {
                 if (clickDebounce()) {
                     trackInteractor.addTrack(track)
-//                    TrackPreferences.writeTrack(item)
-//                    Intent(this@SearchActivity, PlayerActivity::class.java)
                     this@SearchActivity.startActivity(
                         Intent(
-                            this@SearchActivity,
-                            AudioPlayerActivity::class.java
-                        ).putExtra("track", track.serializeTrack())
+                            this@SearchActivity, AudioPlayerActivity::class.java
+                        ).putExtra(getString(R.string.track), track.serializeTrack())
                     )
                 }
             }
@@ -58,12 +54,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val historyList: ArrayList<Track> = ArrayList()
-    private val historyAdapter = TrackAdapter(historyList, this, onTrackClick())
+    private val historyAdapter = TrackAdapter(historyList, onTrackClick())
 
     private lateinit var viewBinding: ActivitySearchBinding
 
     companion object {
-        const val INPUT_STRING = "input"
+        private val INPUT_STRING = App.getContext().getString(R.string.input)
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
@@ -72,15 +68,13 @@ class SearchActivity : AppCompatActivity() {
         viewBinding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        trackInteractor = Creator.provideTracksInteractor(this)
-
+        trackInteractor = Creator.provideTracksInteractor()
 
         viewBinding.ivClear.setOnClickListener {
             viewBinding.etSearch.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(viewBinding.etSearch.windowToken, 0)
-//            trackInteractor.clearHistory()
 
             historyList.clear()
             historyList.addAll(trackInteractor.addHistory())
@@ -128,17 +122,11 @@ class SearchActivity : AppCompatActivity() {
             searchRequest()
         }
         viewBinding.buttonClearHistory.setOnClickListener {
-//            TrackPreferences.removeAll()
             trackInteractor.clearHistory()
             historyList.clear()
             showHistory()
         }
 
-//        App.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
-//            historyList.clear()
-//            historyList.addAll(TrackPreferences.read(sharedPreferences))
-//            historyAdapter.updateTracks(historyList)
-//        }
 
         viewBinding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -167,8 +155,9 @@ class SearchActivity : AppCompatActivity() {
             viewBinding.progressBar.isVisible = true
             var queryStatus: QueryStatus = QueryStatus.WAITING
 
-            val tracksInteractor = Creator.provideTracksInteractor(this)
-            tracksInteractor.searchTracks(viewBinding.etSearch.text.toString(),
+            val tracksInteractor = Creator.provideTracksInteractor()
+            tracksInteractor.searchTracks(
+                viewBinding.etSearch.text.toString(),
                 object : TracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: List<Track>) {
                         handler.post {
@@ -190,8 +179,7 @@ class SearchActivity : AppCompatActivity() {
                         }
 
                     }
-                }
-            )
+                })
             viewBinding.progressBar.isVisible = false
             showMessage(queryStatus)
         } else {
@@ -217,10 +205,7 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.updateTracks(tracks)
             viewBinding.placeholderMessage.text = getString(queryStatus.message)
             viewBinding.placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(
-                0,
-                queryStatus.drawable,
-                0,
-                0
+                0, queryStatus.drawable, 0, 0
             )
             return
         }
@@ -234,9 +219,16 @@ class SearchActivity : AppCompatActivity() {
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 
     enum class QueryStatus(val message: Int, val drawable: Int, val visibility: Boolean) {
-        NOT_FOUND(R.string.nothing_found, R.drawable.nothing, false),
-        NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true),
-        WAITING(-1, 0, false),
+        NOT_FOUND(
+            R.string.nothing_found,
+            R.drawable.nothing,
+            false
+        ),
+        NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true), WAITING(
+            -1,
+            0,
+            false
+        ),
         SUCCESS(-1, 0, false)
     }
 
@@ -250,11 +242,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-//        trackInteractor.saveSearchedTracks(.tracks)
-//        historyList.clear()
-//        historyList.addAll(TrackPreferences.read(sharedPreferences))
-//        historyAdapter.updateTracks(historyList)
-
     }
 }
 

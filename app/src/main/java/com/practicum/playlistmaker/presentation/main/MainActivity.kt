@@ -1,58 +1,57 @@
 package com.practicum.playlistmaker.presentation.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import com.google.android.material.button.MaterialButton
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.databinding.ActivityMainBinding
 import com.practicum.playlistmaker.presentation.mediateka.MediatekaActivity
 import com.practicum.playlistmaker.presentation.settings.SettingsActivity
 import com.practicum.playlistmaker.presentation.tracks.SearchActivity
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewBinding: ActivityMainBinding
+
     private lateinit var myToolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+
         myToolbar = findViewById(R.id.idMainToolbar)
         setSupportActionBar(myToolbar)
-        val buttonSearch = findViewById<MaterialButton>(R.id.idSearch)
-        val buttonMediateka = findViewById<MaterialButton>(R.id.idMediateka)
-        val buttonSettings = findViewById<MaterialButton>(R.id.idSettings)
-        buttonSearch.setOnClickListener(View.OnClickListener {
+
+        viewBinding.idSearch.setOnClickListener {
             startActivity(
                 Intent(
                     this,
                     SearchActivity::class.java
                 )
             )
-        })
-        buttonMediateka.setOnClickListener(View.OnClickListener {
+        }
+
+        viewBinding.idMediateka.setOnClickListener {
             startActivity(
                 Intent(
                     this,
                     MediatekaActivity::class.java
                 )
             )
-        })
-        buttonSettings.setOnClickListener(View.OnClickListener {
+        }
+
+        viewBinding.idSettings.setOnClickListener {
             startActivity(
                 Intent(
                     this,
                     SettingsActivity::class.java
                 )
             )
-        })
-
-        val sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE)
-        var nightMode: Boolean = sharedPreferences.getBoolean("nightMode", false)
-
-        if (nightMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
+
+        val settingsInteractor = Creator.getSettingInteractor()
+        (applicationContext as App).switchTheme(settingsInteractor.getDarkTheme())
     }
 }

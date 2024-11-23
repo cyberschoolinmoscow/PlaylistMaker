@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.creator
 
-import android.content.Context
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.data.SharedPreferenceRepositoryImp
 import com.practicum.playlistmaker.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.data.network.TracksRepositoryImpl
@@ -14,31 +14,31 @@ import com.practicum.playlistmaker.domain.impl.SettingsInteractorImpl
 import com.practicum.playlistmaker.domain.impl.TracksInteractorImpl
 
 object Creator {
-    private fun getTracksRepository(context: Context): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient(), getTrackManager(context))
+    private fun getTracksRepository(): TracksRepository {
+        return TracksRepositoryImpl(RetrofitNetworkClient(), getTrackManager())
     }
 
-    private fun getTrackManager(context: Context): TrackManager {
-        return TrackManager(context)
+    private fun getTrackManager(): TrackManager {
+        return TrackManager()
     }
 
-    fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(context))
+    fun provideTracksInteractor(): TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository())
     }
 
-    fun getSettingInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(getSharedPreferenceRepository(context))
+    fun getSettingInteractor(): SettingsInteractor {
+        return SettingsInteractorImpl(getSharedPreferenceRepository())
     }
 
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(getSharedPreferenceRepository(context))
+    fun provideSettingsInteractor(): SettingsInteractor {
+        return SettingsInteractorImpl(getSharedPreferenceRepository())
     }
 
-    private fun getSharedPreferenceRepository(context: Context): SharedPreferenceRepository {
-        return SharedPreferenceRepositoryImp(getSettingsManager(context))
+    private fun getSharedPreferenceRepository(): SharedPreferenceRepository {
+        return SharedPreferenceRepositoryImp()
     }
 
-    private fun getSettingsManager(context: Context): SettingsManager {
-        return SettingsManager(context)
+    private fun getSettingsManager(): SettingsManager {
+        return SettingsManager(App.getContext())
     }
 }

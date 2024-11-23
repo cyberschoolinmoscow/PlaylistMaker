@@ -1,10 +1,13 @@
 package com.practicum.playlistmaker.data
 
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.data.preferences.SettingsManager
 import com.practicum.playlistmaker.domain.api.SharedPreferenceRepository
 
-class SharedPreferenceRepositoryImp(var settingsManager: SettingsManager) :
-    SharedPreferenceRepository {
+class SharedPreferenceRepositoryImp(
+    private val settingsManager: SettingsManager = SettingsManager(App.getContext())
+) : SharedPreferenceRepository {
+
     override fun getBoolean(themeKey: String): Boolean {
         return settingsManager.sharedPreferences.getBoolean(themeKey, false)
     }
@@ -13,8 +16,12 @@ class SharedPreferenceRepositoryImp(var settingsManager: SettingsManager) :
         settingsManager.sharedPreferences.edit().putBoolean(themeKey, valueDarkTheme).apply()
     }
 
-    override fun saveThemePreferences(darkTheme: Boolean) {
-        putBoolean("nightMode", darkTheme)
+    override fun share() {
+        settingsManager.share()
+    }
+
+    override fun help() {
+        settingsManager.help()
     }
 
 }

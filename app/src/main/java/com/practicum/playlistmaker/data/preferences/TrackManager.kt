@@ -3,14 +3,15 @@ package com.practicum.playlistmaker.data.preferences
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import com.practicum.playlistmaker.App
 import com.practicum.playlistmaker.domain.models.Track
 
-class TrackManager(context: Context) {
+class TrackManager() {
     fun clearHistory() {
         removeAll()
     }
 
-    val sharedPreferences = context.getSharedPreferences("MODE", Context.MODE_PRIVATE)
+    val sharedPreferences = App.getContext().getSharedPreferences("MODE", Context.MODE_PRIVATE)
 
     fun read(): List<Track> {
         if (sharedPreferences.getString(TRACK_KEY, null) == null) {
@@ -31,7 +32,6 @@ class TrackManager(context: Context) {
 
     private val TRACK_KEY = "TRACK_KEY"
     private val MAX_TRACKS_SIZE: Int = 10
-//        private val sharedPreferences: SharedPreferences
 
     private fun writeTrackList(tracks: ArrayList<Track>?) {
         val json = Gson().toJson(tracks)

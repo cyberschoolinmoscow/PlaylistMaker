@@ -17,12 +17,11 @@ class TracksRepositoryImpl(
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         if (response.resultCode == 200) {
             return (response as TrackResponse).results.map {
-//                Track(it.trackName, it.artistName, it.trackTime, it.artworkUrl100, it.collectionName,it.releaseDate,it.primaryGenreName,it.country,it.previewUrl)  }
                 Track(
-                    it.trackId,
+                    it.trackId.toInt(),
                     it.trackName,
                     it.artistName,
-                    it.trackTimeMillis,
+                    it.trackTimeMillis.toInt(),
                     it.artworkUrl100,
                     it.collectionName,
                     it.releaseDate,

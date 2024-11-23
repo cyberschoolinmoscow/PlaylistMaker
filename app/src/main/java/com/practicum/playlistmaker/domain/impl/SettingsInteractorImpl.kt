@@ -3,13 +3,10 @@ package com.practicum.playlistmaker.domain.impl
 import com.practicum.playlistmaker.domain.api.SettingsInteractor
 import com.practicum.playlistmaker.domain.api.SharedPreferenceRepository
 
-class SettingsInteractorImpl(var repository: SharedPreferenceRepository) :
-    SettingsInteractor {
+class SettingsInteractorImpl(
+    private var repository: SharedPreferenceRepository
+) : SettingsInteractor {
     private val THEME_KEY = "theme_key"
-
-//    private val sharedPreferenceRepository: SharedPreferenceRepository =
-//        SharedPreferenceRepositoryImp(context)
-
     override fun getDarkTheme(): Boolean {
         return repository.getBoolean(THEME_KEY)
     }
@@ -20,6 +17,14 @@ class SettingsInteractorImpl(var repository: SharedPreferenceRepository) :
 
     override fun getThemePreference(): Boolean {
         return getDarkTheme()
+    }
+
+    override fun share() {
+        repository.share()
+    }
+
+    override fun help() {
+        repository.help()
     }
 
 }
