@@ -5,19 +5,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.practicum.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 class AudioPlayerActivity : AppCompatActivity() {
+    private lateinit var viewBinding: ActivityAudioPlayerBinding
+
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
@@ -37,42 +38,29 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audio_player)
+        viewBinding = ActivityAudioPlayerBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
         val myToolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.idSearchToolbar)
         setSupportActionBar(myToolbar)
         myToolbar.setNavigationOnClickListener { finish() }
         myToolbar.title = ""
-        val trackName: TextView = findViewById(R.id.trackName)
-        val artistName: TextView = findViewById(R.id.artistName)
-        val artistImage: ImageView = findViewById(R.id.artistImage)
-        val trackDuration: TextView = findViewById(R.id.trackDuration)
-        val collectionName: TextView = findViewById(R.id.collectionName)
-        val releaseDate: TextView = findViewById(R.id.releaseDate)
-        val primaryGenreName: TextView = findViewById(R.id.primaryGenreName)
-        val country: TextView = findViewById(R.id.country)
-        val collectionGroup: Group = findViewById(R.id.collectionGroup)
-        trackTime = findViewById(R.id.trackTime)
-        play = findViewById(R.id.play_btn)
         val arguments = intent.extras
         val name = arguments!!.getString("track")
         val track = Track.deserializeTrack(name)
-        trackName.text = track.trackName
-        artistName.text = track.artistName
-        trackDuration.text = track.getDuration()
+        viewBinding.trackName.text = track.trackName
+        viewBinding.artistName.text = track.artistName
+        viewBinding.trackDuration.text = track.getDuration()
         if (track.collectionName.isNullOrEmpty()) {
-            collectionGroup.isVisible = false
+            viewBinding.collectionGroup.isVisible = false
         } else {
-            collectionName.text = track.collectionName
+            viewBinding.collectionName.text = track.collectionName
         }
-        releaseDate.text = track.getReleaseYear()
-        primaryGenreName.text = track.primaryGenreName
-        country.text = track.country
-        Glide.with(this)
-            .load(track.getCoverArtwork())
-            .centerCrop()
-            .placeholder(R.drawable.placeholder)
-            .into(artistImage)
+        viewBinding.releaseDate.text = track.getReleaseYear()
+        viewBinding.primaryGenreName.text = track.primaryGenreName
+        viewBinding.country.text = track.country
+        Glide.with(this).load(track.getCoverArtwork()).centerCrop()
+            .placeholder(R.drawable.placeholder).into(viewBinding.artistImage)
         preparePlayer(track.previewUrl)
         play.setOnClickListener {
             playbackControl()

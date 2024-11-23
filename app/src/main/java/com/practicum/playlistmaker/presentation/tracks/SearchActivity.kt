@@ -28,8 +28,6 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
 
-//    private val handler = Handler(Looper.getMainLooper())
-
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
@@ -48,8 +46,7 @@ class SearchActivity : AppCompatActivity() {
 //                    Intent(this@SearchActivity, PlayerActivity::class.java)
                     this@SearchActivity.startActivity(
                         Intent(
-                            this@SearchActivity,
-                            AudioPlayerActivity::class.java
+                            this@SearchActivity, AudioPlayerActivity::class.java
                         ).putExtra("track", track.serializeTrack())
                     )
                 }
@@ -73,7 +70,6 @@ class SearchActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         trackInteractor = Creator.provideTracksInteractor(this)
-
 
         viewBinding.ivClear.setOnClickListener {
             viewBinding.etSearch.setText("")
@@ -128,17 +124,11 @@ class SearchActivity : AppCompatActivity() {
             searchRequest()
         }
         viewBinding.buttonClearHistory.setOnClickListener {
-//            TrackPreferences.removeAll()
             trackInteractor.clearHistory()
             historyList.clear()
             showHistory()
         }
 
-//        App.sharedPreferences.registerOnSharedPreferenceChangeListener { sharedPreferences, _ ->
-//            historyList.clear()
-//            historyList.addAll(TrackPreferences.read(sharedPreferences))
-//            historyAdapter.updateTracks(historyList)
-//        }
 
         viewBinding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -168,7 +158,8 @@ class SearchActivity : AppCompatActivity() {
             var queryStatus: QueryStatus = QueryStatus.WAITING
 
             val tracksInteractor = Creator.provideTracksInteractor(this)
-            tracksInteractor.searchTracks(viewBinding.etSearch.text.toString(),
+            tracksInteractor.searchTracks(
+                viewBinding.etSearch.text.toString(),
                 object : TracksInteractor.TracksConsumer {
                     override fun consume(foundTracks: List<Track>) {
                         handler.post {
@@ -190,8 +181,7 @@ class SearchActivity : AppCompatActivity() {
                         }
 
                     }
-                }
-            )
+                })
             viewBinding.progressBar.isVisible = false
             showMessage(queryStatus)
         } else {
@@ -217,10 +207,7 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.updateTracks(tracks)
             viewBinding.placeholderMessage.text = getString(queryStatus.message)
             viewBinding.placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(
-                0,
-                queryStatus.drawable,
-                0,
-                0
+                0, queryStatus.drawable, 0, 0
             )
             return
         }
@@ -234,9 +221,16 @@ class SearchActivity : AppCompatActivity() {
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 
     enum class QueryStatus(val message: Int, val drawable: Int, val visibility: Boolean) {
-        NOT_FOUND(R.string.nothing_found, R.drawable.nothing, false),
-        NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true),
-        WAITING(-1, 0, false),
+        NOT_FOUND(
+            R.string.nothing_found,
+            R.drawable.nothing,
+            false
+        ),
+        NO_INTERNET(R.string.something_went_wrong, R.drawable.internet, true), WAITING(
+            -1,
+            0,
+            false
+        ),
         SUCCESS(-1, 0, false)
     }
 
@@ -250,11 +244,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-//        trackInteractor.saveSearchedTracks(.tracks)
-//        historyList.clear()
-//        historyList.addAll(TrackPreferences.read(sharedPreferences))
-//        historyAdapter.updateTracks(historyList)
-
     }
 }
 

@@ -35,7 +35,7 @@ object Creator {
     }
 
     private fun getSharedPreferenceRepository(context: Context): SharedPreferenceRepository {
-        return SharedPreferenceRepositoryImp(getSettingsManager(context))
+        return SharedPreferenceRepositoryImp(context)
     }
 
     private fun getSettingsManager(context: Context): SettingsManager {

@@ -1,10 +1,14 @@
 package com.practicum.playlistmaker.data
 
+import android.content.Context
 import com.practicum.playlistmaker.data.preferences.SettingsManager
 import com.practicum.playlistmaker.domain.api.SharedPreferenceRepository
 
-class SharedPreferenceRepositoryImp(var settingsManager: SettingsManager) :
-    SharedPreferenceRepository {
+class SharedPreferenceRepositoryImp(
+    val context: Context,
+    val settingsManager: SettingsManager = SettingsManager(context)
+) : SharedPreferenceRepository {
+
     override fun getBoolean(themeKey: String): Boolean {
         return settingsManager.sharedPreferences.getBoolean(themeKey, false)
     }

@@ -2,11 +2,14 @@ package com.practicum.playlistmaker.presentation.mediateka
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivityMediatekaBinding
 
 class MediatekaActivity : AppCompatActivity() {
+
+    private lateinit var viewBinding: ActivityMediatekaBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mediateka)
+        viewBinding = ActivityMediatekaBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
     }
 }
