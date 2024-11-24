@@ -6,10 +6,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.creator.Creator
 
 class App : Application() {
-
-    //    var darkTheme = false
-//public lateinit var context:Context
-//  var  darkTheme: Boolean=false
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
@@ -30,15 +26,8 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-//        var editor: SharedPreferences.Editor
-//        editor = sharedPreferences.edit()
-//        editor.putBoolean("nightMode", darkTheme)
-//        editor.apply()
     }
 
-    //    companion object {
-//        lateinit var sharedPreferences: SharedPreferences
-//    }
     companion object {
         fun getContext(): Context {
             return context
