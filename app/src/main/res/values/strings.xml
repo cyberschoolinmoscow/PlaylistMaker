@@ -23,4 +23,6 @@
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="_1_30">00:00</string>
+    <string name="track">track</string>
+    <string name="input">input</string>
 </resources>

@@ -9,7 +9,8 @@
     android:background="?attr/colorSecondary"
     android:insetTop="0dp"
     android:insetBottom="0dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".presentation.tracks.SearchActivity">
 
     <include layout="@layout/search_toolbar" />
 
